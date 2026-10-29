@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Download NLP Models
 RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download en_core_web_md
 RUN python -c "import nltk; nltk.download('wordnet')"
 
 # Copy the rest of your backend files
