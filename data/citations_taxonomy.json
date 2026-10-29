@@ -1,0 +1,102 @@
+{
+  "Computer Science & AI": [
+    {
+      "author": "Vaswani et al.",
+      "year": "2017",
+      "title": "Attention Is All You Need",
+      "journal": "Advances in Neural Information Processing Systems (NeurIPS)",
+      "volume": "30",
+      "pages": "5998-6008",
+      "doi": "10.5555/3295222.3295349",
+      "key": "vaswani2017attention"
+    },
+    {
+      "author": "He et al.",
+      "year": "2016",
+      "title": "Deep Residual Learning for Image Recognition",
+      "journal": "IEEE CVPR",
+      "volume": "1",
+      "pages": "770-778",
+      "doi": "10.1109/CVPR.2016.90",
+      "key": "he2016deep"
+    },
+    {
+      "author": "Liang et al.",
+      "year": "2023",
+      "title": "GPT Detectors Are Biased Against Non-Native English Writers",
+      "journal": "Patterns (Cell Press)",
+      "volume": "4",
+      "pages": "100779",
+      "doi": "10.1016/j.patter.2023.100779",
+      "key": "liang2023gpt"
+    },
+    {
+      "author": "Devlin et al.",
+      "year": "2019",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers",
+      "journal": "NAACL-HLT",
+      "volume": "1",
+      "pages": "4171-4186",
+      "doi": "10.18653/v1/N19-1423",
+      "key": "devlin2019bert"
+    }
+  ],
+  "Electrical & Systems Engineering": [
+    {
+      "author": "\u00c5str\u00f6m & Murray",
+      "year": "2021",
+      "title": "Feedback Systems: An Introduction for Scientists and Engineers",
+      "journal": "Princeton University Press",
+      "volume": "2",
+      "pages": "1-432",
+      "doi": "10.2307/j.ctv19fvzzk",
+      "key": "astrom2021feedback"
+    },
+    {
+      "author": "Kalman",
+      "year": "1960",
+      "title": "A New Approach to Linear Filtering and Prediction Problems",
+      "journal": "Transactions of the ASME",
+      "volume": "82",
+      "pages": "35-45",
+      "doi": "10.1115/1.3662552",
+      "key": "kalman1960new"
+    }
+  ],
+  "Quantitative Finance & Economics": [
+    {
+      "author": "Fama & French",
+      "year": "2015",
+      "title": "A five-factor asset pricing model",
+      "journal": "Journal of Financial Economics",
+      "volume": "116",
+      "pages": "1-22",
+      "doi": "10.1016/j.jfineco.2014.10.010",
+      "key": "fama2015five"
+    }
+  ],
+  "Clinical Medicine & Bioinformatics": [
+    {
+      "author": "Topol",
+      "year": "2019",
+      "title": "High-performance medicine: the convergence of human and AI",
+      "journal": "Nature Medicine",
+      "volume": "25",
+      "pages": "44-56",
+      "doi": "10.1038/s41591-018-0300-7",
+      "key": "topol2019high"
+    }
+  ],
+  "Social Sciences & Psychology": [
+    {
+      "author": "Kahneman & Tversky",
+      "year": "1979",
+      "title": "Prospect Theory: An Analysis of Decision under Risk",
+      "journal": "Econometrica",
+      "volume": "47",
+      "pages": "263-291",
+      "doi": "10.2307/1914185",
+      "key": "kahneman1979prospect"
+    }
+  ]
+}
