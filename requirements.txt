@@ -1,9 +1,12 @@
 fastapi
 uvicorn
 python-multipart
+pydantic
 spacy
 nltk
-scikit-learn==1.9.0
-pydantic
 wordfreq
 python-docx
+lemminflect==0.2.3
+joblib==1.5.3
+requests
+scikit-learn==1.9.0
