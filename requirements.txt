@@ -3,6 +3,7 @@ uvicorn
 python-multipart
 spacy
 nltk
-scikit-learn
+scikit-learn==1.9.0
 pydantic
 wordfreq
+python-docx
