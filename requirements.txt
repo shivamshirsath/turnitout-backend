@@ -2,6 +2,7 @@ streamlit
 firebase-admin
 pydantic
 spacy==3.8.0
+numpy<2.0.0
 nltk
 wordfreq
 python-docx
