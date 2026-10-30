@@ -20,159 +20,106 @@ st.markdown("""
     footer {visibility: hidden !important;}
     .stApp bottom {display: none !important;}
 
-    /* 2. Base Background matching Warm Cream Beige */
-    .stApp, .stApp > header {
-        background-color: #E8D2B5 !important;
+    /* 2. Base Background matching Next.js Walnut Brown */
+    .stApp {
+        background-color: #1C140F !important;
     }
     
-    /* 3. Force Global Text to Dark Slate (NO BLACK BOXES) */
-    html, body, p, span, h1, h2, h3, h4, h5, h6, label, div {
+    /* 3. General Text & Typography */
+    html, body, [class*="css"], p, span, h1, h2, h3, h4, h5, h6, label {
         font-family: 'Inter', sans-serif !important;
-        color: #1e293b !important; 
+        color: #F1F5F9 !important;
     }
 
-    /* 4. Alert Boxes (Info, Warning, Error, Success) */
-    [data-testid="stAlert"] {
-        background-color: #F5EBDD !important;
-        border: 1px solid #C6B49E !important;
-        border-radius: 12px !important;
-    }
-
-    /* 5. Text Area (Source Input) */
+    /* 4. Text Area (Source Input) */
     .stTextArea textarea {
-        background-color: #F5EBDD !important;
-        border: 2px solid #C6B49E !important;
-        color: #1e293b !important;
-        -webkit-text-fill-color: #1e293b !important;
+        background-color: #2A1E15 !important;
+        border: 1px solid #5A3E2B !important;
+        color: #F1F5F9 !important;
         border-radius: 12px !important;
         padding: 1rem !important;
     }
     .stTextArea textarea:focus {
-        border-color: #590907 !important;
-        box-shadow: 0 0 0 1px #590907 !important;
+        border-color: #D5851F !important;
+        box-shadow: 0 0 0 1px #D5851F !important;
     }
 
-    /* 6. Dropdowns */
-    div[data-baseweb="select"] > div {
-        background-color: #F5EBDD !important;
-        border: 2px solid #C6B49E !important;
+    /* 5. Dropdowns and Sliders */
+    .stSelectbox div[data-baseweb="select"] > div {
+        background-color: #2A1E15 !important;
+        border: 1px solid #5A3E2B !important;
         border-radius: 10px !important;
+        color: #F1F5F9 !important;
     }
-    div[data-baseweb="popover"] > div {
-        background-color: #F5EBDD !important;
-        border: 1px solid #C6B49E !important;
+    .stSlider [data-testid="stTickBar"] {
+        background-color: #5A3E2B !important;
     }
-
-    /* 7. Sliders */
-    [data-testid="stTickBar"] {
-        background-color: #C6B49E !important;
-    }
-    [data-baseweb="slider"] div[data-testid="stSliderThumb"] {
-        background-color: #590907 !important;
-        border: 2px solid #F5EBDD !important;
-    }
-    [data-baseweb="slider"] div[data-testid="stSliderTrack"] > div {
-        background-color: #590907 !important;
+    .stSlider [data-baseweb="slider"] div {
+        background-color: #87A96B !important;
     }
 
-    /* 8. Primary Action Buttons (Deep Burgundy) */
-    .stButton > button, .stDownloadButton > button {
-        background-color: #590907 !important;
-        color: #F5EBDD !important;
+    /* 6. Primary Action Buttons (Amber Glow) */
+    .stButton > button {
+        background-color: #D5851F !important;
+        color: #FFFFFF !important;
         border: none !important;
         border-radius: 12px !important;
         font-weight: 700 !important;
         padding: 0.5rem 1rem !important;
         transition: all 0.3s ease !important;
     }
-    .stButton > button:hover, .stDownloadButton > button:hover {
-        background-color: #7a1210 !important;
-        color: #ffffff !important;
-        box-shadow: 0 4px 15px rgba(89, 9, 7, 0.25) !important;
+    .stButton > button:hover {
+        background-color: #b56e18 !important;
+        box-shadow: 0 4px 15px rgba(213, 133, 31, 0.4) !important;
         transform: translateY(-1px) !important;
-    }
-    .stButton > button *, .stDownloadButton > button * {
-        color: inherit !important;
-        fill: currentColor !important;
+        color: white !important;
     }
 
-    /* 9. Tabs Styling */
-    button[data-baseweb="tab"] {
-        background-color: transparent !important;
-        color: #64748b !important;
-        border: none !important;
-    }
-    button[data-baseweb="tab"][aria-selected="true"] {
-        color: #590907 !important;
-        border-bottom: 2px solid #590907 !important;
-        font-weight: 900 !important;
-    }
+    /* 7. Tabs Styling (Text vs File Upload) */
     .stTabs [data-baseweb="tab-list"] {
-        border-bottom: 1px solid #C6B49E !important;
-        gap: 1.5rem !important;
+        background-color: transparent !important;
+        gap: 2rem !important;
+        border-bottom: 1px solid #5A3E2B !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        color: #94A3B8 !important;
+        background-color: transparent !important;
+        border: none !important;
+        padding-bottom: 1rem !important;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #87A96B !important;
+        border-bottom: 2px solid #87A96B !important;
+        font-weight: 700 !important;
     }
 
-    /* 10. File Uploader Fix (Completely stripping black backgrounds) */
-    [data-testid="stFileUploader"] > div, 
-    [data-testid="stFileUploader"] section {
-        background-color: transparent !important;
+    /* 8. Alert Boxes (Info, Warning, Error, Success) */
+    .stAlert {
+        background-color: #2A1E15 !important;
+        border: 1px solid #5A3E2B !important;
+        border-radius: 12px !important;
+        color: #F1F5F9 !important;
     }
+    .stAlert p {
+        color: #F1F5F9 !important;
+    }
+
+    /* 9. File Uploader Dropzone */
     [data-testid="stFileUploadDropzone"] {
-        background-color: #F5EBDD !important;
-        border: 2px dashed #A5A79B !important;
+        background-color: #2A1E15 !important;
+        border: 2px dashed #5A3E2B !important;
         border-radius: 16px !important;
         padding: 2rem !important;
+        transition: all 0.3s ease !important;
     }
     [data-testid="stFileUploadDropzone"]:hover {
-        border-color: #590907 !important;
-        background-color: #E8D2B5 !important;
+        border-color: #87A96B !important;
+        background-color: rgba(135, 169, 107, 0.05) !important;
     }
     [data-testid="stFileUploadDropzone"] button {
-        background-color: #590907 !important;
-        color: #F5EBDD !important;
-        border: none !important;
+        background-color: #5A3E2B !important;
+        color: white !important;
         border-radius: 8px !important;
-    }
-    div[data-testid="stUploadedFile"] {
-        background-color: #F5EBDD !important;
-        border: 1px solid #C6B49E !important;
-        border-radius: 8px !important;
-    }
-
-    /* 11. Custom Output Box with Native Copy Button (Matching Text Area perfectly) */
-    [data-testid="stCodeBlock"] {
-        background-color: #F5EBDD !important;
-        border: 2px solid #C6B49E !important;
-        border-radius: 12px !important;
-        padding: 1rem !important;
-        width: 100% !important;
-    }
-    [data-testid="stCodeBlock"] pre, [data-testid="stCodeBlock"] code {
-        background-color: transparent !important;
-        color: #1e293b !important;
-        font-family: 'Inter', sans-serif !important; /* Force standard font, not code font */
-        font-size: 16px !important;
-        white-space: pre-wrap !important; /* Ensures text wraps normally */
-        line-height: 1.6 !important;
-        border: none !important;
-    }
-    /* Proper visible copy button */
-    [data-testid="stCodeBlock"] button {
-        background-color: #590907 !important;
-        border-radius: 8px !important;
-        border: none !important;
-        opacity: 1 !important; 
-        visibility: visible !important;
-        position: absolute !important;
-        right: 12px !important;
-        top: 12px !important;
-        padding: 6px !important;
-    }
-    [data-testid="stCodeBlock"] button:hover {
-        background-color: #7a1210 !important;
-    }
-    [data-testid="stCodeBlock"] button svg {
-        stroke: #F5EBDD !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -304,10 +251,7 @@ with tab_text:
 
     if "humanized_result" in st.session_state:
         st.success("Text Successfully Humanized!")
-        st.markdown("**Processed Output:**")
-        # Critical change: language=None strips out the internal dark-mode syntax highlighters 
-        # allowing our CSS to style this box exactly like the input text area.
-        st.code(st.session_state.humanized_result, language=None)
+        st.write(st.session_state.humanized_result)
 
 # --- FILE UPLOAD TAB ---
 with tab_files:
