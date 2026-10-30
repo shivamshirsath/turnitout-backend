@@ -12,26 +12,35 @@ from processors.latex_processor import process_latex_manuscript
 st.set_page_config(page_title="humantext workspace", layout="centered")
 
 # --- MASSIVE UI THEME OVERRIDE ---
+# --- MASSIVE UI THEME OVERRIDE ---
 st.markdown("""
     <style>
     /* 1. Hide default Streamlit headers, footers, and menus completely */
-    #MainMenu {visibility: hidden !important;}
-    header {visibility: hidden !important;}
-    footer {visibility: hidden !important;}
+    #MainMenu {display: none !important; visibility: hidden !important;}
+    header {display: none !important; visibility: hidden !important;}
+    footer {display: none !important; visibility: hidden !important;}
+
+    /* 2. FORCE HIDE THE "BUILT WITH STREAMLIT" EMBED WHITE BAR */
+    [data-testid="stBottom"] {display: none !important;}
+    [data-testid="stBottomBar"] {display: none !important;}
+    [data-testid="stToolbar"] {display: none !important;}
+    
+    /* Target the specific root-level div Streamlit uses for the embed footer */
+    .stApp > div:last-child {display: none !important; background: transparent !important;}
     .stApp bottom {display: none !important;}
 
-    /* 2. Base Background matching Next.js Walnut Brown */
+    /* 3. Base Background matching Next.js Walnut Brown */
     .stApp {
         background-color: #1C140F !important;
     }
     
-    /* 3. General Text & Typography */
+    /* 4. General Text & Typography */
     html, body, [class*="css"], p, span, h1, h2, h3, h4, h5, h6, label {
         font-family: 'Inter', sans-serif !important;
         color: #F1F5F9 !important;
     }
 
-    /* 4. Text Area (Source Input) */
+    /* 5. Text Area (Source Input) */
     .stTextArea textarea {
         background-color: #2A1E15 !important;
         border: 1px solid #5A3E2B !important;
@@ -44,7 +53,7 @@ st.markdown("""
         box-shadow: 0 0 0 1px #D5851F !important;
     }
 
-    /* 5. Dropdowns and Sliders */
+    /* 6. Dropdowns and Sliders */
     .stSelectbox div[data-baseweb="select"] > div {
         background-color: #2A1E15 !important;
         border: 1px solid #5A3E2B !important;
@@ -58,7 +67,7 @@ st.markdown("""
         background-color: #87A96B !important;
     }
 
-    /* 6. Primary Action Buttons (Amber Glow) */
+    /* 7. Primary Action Buttons (Amber Glow) */
     .stButton > button {
         background-color: #D5851F !important;
         color: #FFFFFF !important;
@@ -75,7 +84,7 @@ st.markdown("""
         color: white !important;
     }
 
-    /* 7. Tabs Styling (Text vs File Upload) */
+    /* 8. Tabs Styling (Text vs File Upload) */
     .stTabs [data-baseweb="tab-list"] {
         background-color: transparent !important;
         gap: 2rem !important;
@@ -93,7 +102,7 @@ st.markdown("""
         font-weight: 700 !important;
     }
 
-    /* 8. Alert Boxes (Info, Warning, Error, Success) */
+    /* 9. Alert Boxes (Info, Warning, Error, Success) */
     .stAlert {
         background-color: #2A1E15 !important;
         border: 1px solid #5A3E2B !important;
@@ -104,7 +113,7 @@ st.markdown("""
         color: #F1F5F9 !important;
     }
 
-    /* 9. File Uploader Dropzone */
+    /* 10. File Uploader Dropzone */
     [data-testid="stFileUploadDropzone"] {
         background-color: #2A1E15 !important;
         border: 2px dashed #5A3E2B !important;
