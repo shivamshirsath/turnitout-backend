@@ -68,15 +68,17 @@ limits = {"free": 3, "pro": 50, "ultra": 300}
 max_runs = limits.get(plan, 3)
 runs_left = max_runs - daily_used + reward_credits
 
-# Display Credits in Streamlit Sidebar
-st.sidebar.success(f"🔋 **Runs Left:** {runs_left}")
-st.sidebar.info(f"💎 **Plan:** {plan.upper()}")
+# Display Credits and Sync Button directly on the main screen
+col_plan, col_runs, col_sync = st.columns(3)
 
-# --- MANUAL SYNC BUTTON ---
-# Just in case they buy a plan in another tab and don't refresh the page
-if st.sidebar.button("🔄 Sync Account"):
-    st.session_state.pop("user_data", None)
-    st.rerun()
+with col_plan:
+    st.info(f"💎 **Plan:** {plan.upper()}")
+with col_runs:
+    st.success(f"🔋 **Runs Left:** {runs_left}")
+with col_sync:
+    if st.button("🔄 Sync Account", use_container_width=True):
+        st.session_state.pop("user_data", None)
+        st.rerun()
 
 # 5. Load Engine (Cached so it only loads once)
 @st.cache_resource
