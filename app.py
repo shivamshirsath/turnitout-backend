@@ -21,7 +21,7 @@ st.markdown("""
     .stApp bottom {display: none !important;}
 
     /* 2. Base Background matching Warm Cream Beige */
-    .stApp {
+    .stApp, .stApp > header {
         background-color: #E8D2B5 !important;
     }
     
@@ -31,11 +31,23 @@ st.markdown("""
         color: #1e293b !important; /* Dark slate text for readability */
     }
 
-    /* 4. Text Area (Source Input) */
-    .stTextArea textarea {
+    /* 4. Alert Boxes (Info, Warning, Error, Success) - Fixes top banners */
+    [data-testid="stAlert"] {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
+        border-radius: 12px !important;
         color: #1e293b !important;
+    }
+    [data-testid="stAlert"] * {
+        color: #1e293b !important;
+    }
+
+    /* 5. Text Area (Source Input) */
+    .stTextArea textarea {
+        background-color: #F5EBDD !important;
+        border: 2px solid #C6B49E !important;
+        color: #1e293b !important;
+        -webkit-text-fill-color: #1e293b !important;
         border-radius: 12px !important;
         padding: 1rem !important;
     }
@@ -44,22 +56,40 @@ st.markdown("""
         box-shadow: 0 0 0 1px #590907 !important;
     }
 
-    /* 5. Dropdowns and Sliders */
-    .stSelectbox div[data-baseweb="select"] > div {
+    /* 6. Dropdowns (Fixes dark selectbox issue) */
+    div[data-baseweb="select"] > div {
         background-color: #F5EBDD !important;
-        border: 1px solid #C6B49E !important;
+        border: 2px solid #C6B49E !important;
         border-radius: 10px !important;
         color: #1e293b !important;
     }
-    .stSlider [data-testid="stTickBar"] {
+    div[data-baseweb="select"] * {
+        color: #1e293b !important;
+    }
+    
+    /* Dropdown list popover menu */
+    div[data-baseweb="popover"] > div {
+        background-color: #F5EBDD !important;
+        border: 1px solid #C6B49E !important;
+    }
+    div[data-baseweb="popover"] li {
+        color: #1e293b !important;
+    }
+
+    /* 7. Sliders (Overrides default red) */
+    [data-testid="stTickBar"] {
         background-color: #C6B49E !important;
     }
-    .stSlider [data-baseweb="slider"] div {
+    [data-baseweb="slider"] div[data-testid="stSliderThumb"] {
+        background-color: #590907 !important;
+        border: 2px solid #F5EBDD !important;
+    }
+    [data-baseweb="slider"] div[data-testid="stSliderTrack"] > div {
         background-color: #590907 !important;
     }
 
-    /* 6. Primary Action Buttons (Deep Burgundy) */
-    .stButton > button, .stButton > button * {
+    /* 8. Primary Action Buttons (Deep Burgundy) */
+    .stButton > button, .stDownloadButton > button {
         background-color: #590907 !important;
         color: #F5EBDD !important;
         border: none !important;
@@ -68,58 +98,58 @@ st.markdown("""
         padding: 0.5rem 1rem !important;
         transition: all 0.3s ease !important;
     }
-    .stButton > button:hover, .stButton > button:hover * {
+    .stButton > button:hover, .stDownloadButton > button:hover {
         background-color: #7a1210 !important;
+        color: #ffffff !important;
         box-shadow: 0 4px 15px rgba(89, 9, 7, 0.25) !important;
         transform: translateY(-1px) !important;
-        color: white !important;
+    }
+    .stButton > button *, .stDownloadButton > button * {
+        color: inherit !important;
     }
 
-    /* 7. Tabs Styling (Text vs File Upload) */
-    .stTabs [data-baseweb="tab-list"] {
+    /* 9. Tabs Styling */
+    button[data-baseweb="tab"] {
         background-color: transparent !important;
-        gap: 2rem !important;
-        border-bottom: 1px solid #C6B49E !important;
-    }
-    .stTabs [data-baseweb="tab"] {
         color: #64748b !important;
-        background-color: transparent !important;
         border: none !important;
-        padding-bottom: 1rem !important;
     }
-    .stTabs [aria-selected="true"], .stTabs [aria-selected="true"] * {
+    button[data-baseweb="tab"][aria-selected="true"] {
         color: #590907 !important;
         border-bottom: 2px solid #590907 !important;
-        font-weight: 700 !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] * {
+        color: #590907 !important;
+    }
+    .stTabs [data-baseweb="tab-list"] {
+        border-bottom: 1px solid #C6B49E !important;
+        gap: 1.5rem !important;
     }
 
-    /* 8. Alert Boxes (Info, Warning, Error, Success) */
-    .stAlert {
-        background-color: #F5EBDD !important;
-        border: 1px solid #C6B49E !important;
-        border-radius: 12px !important;
-        color: #1e293b !important;
-    }
-    .stAlert p {
-        color: #1e293b !important;
-    }
-
-    /* 9. File Uploader Dropzone */
+    /* 10. File Uploader Dropzone (Fixes unreadable dark box) */
     [data-testid="stFileUploadDropzone"] {
         background-color: #F5EBDD !important;
-        border: 2px dashed #C6B49E !important;
+        border: 2px dashed #A5A79B !important;
         border-radius: 16px !important;
         padding: 2rem !important;
         transition: all 0.3s ease !important;
     }
     [data-testid="stFileUploadDropzone"]:hover {
         border-color: #590907 !important;
-        background-color: rgba(89, 9, 7, 0.05) !important;
+        background-color: #E8D2B5 !important;
     }
-    [data-testid="stFileUploadDropzone"] button, [data-testid="stFileUploadDropzone"] button * {
+    [data-testid="stFileUploadDropzone"] * {
+        color: #1e293b !important;
+    }
+    [data-testid="stFileUploadDropzone"] button {
         background-color: #590907 !important;
         color: #F5EBDD !important;
+        border: none !important;
         border-radius: 8px !important;
+        padding: 0.25rem 0.75rem !important;
+    }
+    [data-testid="stFileUploadDropzone"] button * {
+        color: #F5EBDD !important;
     }
     </style>
 """, unsafe_allow_html=True)
