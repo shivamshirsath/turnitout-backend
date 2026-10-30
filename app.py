@@ -213,9 +213,9 @@ with tab_text:
 
     col1, col2 = st.columns(2)
     with col1:
-        intensity = st.slider("Humanize Intensity", 1, 100, 95)
+        intensity = st.slider("Humanize Intensity", 1, 100, 100)
     with col2:
-        tone = st.selectbox("Tone", ["professional", "academic", "casual"])
+        tone = st.selectbox("Tone", ["professional"])
 
     if st.button("Humanize Text", use_container_width=True):
         if not input_text.strip():
