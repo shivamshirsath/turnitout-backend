@@ -25,10 +25,10 @@ st.markdown("""
         background-color: #E8D2B5 !important;
     }
     
-    /* 3. General Text & Typography */
-    html, body, [class*="css"], p, span, h1, h2, h3, h4, h5, h6, label {
+    /* 3. Force Global Text to Dark Slate (NO BLACK BOXES) */
+    html, body, p, span, h1, h2, h3, h4, h5, h6, label, div {
         font-family: 'Inter', sans-serif !important;
-        color: #1e293b !important; /* Dark slate text for readability */
+        color: #1e293b !important; 
     }
 
     /* 4. Alert Boxes (Info, Warning, Error, Success) */
@@ -36,10 +36,6 @@ st.markdown("""
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
         border-radius: 12px !important;
-        color: #1e293b !important;
-    }
-    [data-testid="stAlert"] * {
-        color: #1e293b !important;
     }
 
     /* 5. Text Area (Source Input) */
@@ -61,17 +57,10 @@ st.markdown("""
         background-color: #F5EBDD !important;
         border: 2px solid #C6B49E !important;
         border-radius: 10px !important;
-        color: #1e293b !important;
-    }
-    div[data-baseweb="select"] * {
-        color: #1e293b !important;
     }
     div[data-baseweb="popover"] > div {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
-    }
-    div[data-baseweb="popover"] li {
-        color: #1e293b !important;
     }
 
     /* 7. Sliders */
@@ -104,6 +93,7 @@ st.markdown("""
     }
     .stButton > button *, .stDownloadButton > button * {
         color: inherit !important;
+        fill: currentColor !important;
     }
 
     /* 9. Tabs Styling */
@@ -115,32 +105,27 @@ st.markdown("""
     button[data-baseweb="tab"][aria-selected="true"] {
         color: #590907 !important;
         border-bottom: 2px solid #590907 !important;
-    }
-    button[data-baseweb="tab"][aria-selected="true"] * {
-        color: #590907 !important;
+        font-weight: 900 !important;
     }
     .stTabs [data-baseweb="tab-list"] {
         border-bottom: 1px solid #C6B49E !important;
         gap: 1.5rem !important;
     }
 
-    /* 10. File Uploader Deep Targeting (Fixes unreadable dark box) */
+    /* 10. File Uploader Fix (Completely stripping black backgrounds) */
+    [data-testid="stFileUploader"] > div, 
     [data-testid="stFileUploader"] section {
-        background-color: #F5EBDD !important;
+        background-color: transparent !important;
     }
     [data-testid="stFileUploadDropzone"] {
         background-color: #F5EBDD !important;
         border: 2px dashed #A5A79B !important;
         border-radius: 16px !important;
         padding: 2rem !important;
-        transition: all 0.3s ease !important;
     }
     [data-testid="stFileUploadDropzone"]:hover {
         border-color: #590907 !important;
         background-color: #E8D2B5 !important;
-    }
-    [data-testid="stFileUploadDropzone"] *, [data-testid="stFileUploader"] span, [data-testid="stFileUploader"] small {
-        color: #1e293b !important;
     }
     [data-testid="stFileUploadDropzone"] button {
         background-color: #590907 !important;
@@ -148,46 +133,40 @@ st.markdown("""
         border: none !important;
         border-radius: 8px !important;
     }
-    [data-testid="stFileUploadDropzone"] button * {
-        color: #F5EBDD !important;
-        fill: #F5EBDD !important;
-    }
     div[data-testid="stUploadedFile"] {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
         border-radius: 8px !important;
-        color: #1e293b !important;
     }
 
-    /* 11. Custom Output Box with Native Copy Button */
+    /* 11. Custom Output Box with Native Copy Button (Matching Text Area perfectly) */
     [data-testid="stCodeBlock"] {
         background-color: #F5EBDD !important;
-        border: 1px solid #C6B49E !important;
+        border: 2px solid #C6B49E !important;
         border-radius: 12px !important;
         padding: 1rem !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+        width: 100% !important;
     }
-    [data-testid="stCodeBlock"] pre {
+    [data-testid="stCodeBlock"] pre, [data-testid="stCodeBlock"] code {
         background-color: transparent !important;
+        color: #1e293b !important;
+        font-family: 'Inter', sans-serif !important; /* Force standard font, not code font */
+        font-size: 16px !important;
+        white-space: pre-wrap !important; /* Ensures text wraps normally */
+        line-height: 1.6 !important;
         border: none !important;
     }
-    [data-testid="stCodeBlock"] code {
-        font-family: 'Inter', sans-serif !important; /* Overrides monospaced font */
-        color: #1e293b !important;
-        font-size: 15px !important;
-        white-space: pre-wrap !important; /* Ensures text wraps properly */
-        line-height: 1.6 !important;
-        background-color: transparent !important;
-    }
-    /* Style the copy button to fit the theme */
+    /* Proper visible copy button */
     [data-testid="stCodeBlock"] button {
         background-color: #590907 !important;
         border-radius: 8px !important;
         border: none !important;
-        right: 0.5rem !important;
-        top: 0.5rem !important;
         opacity: 1 !important; 
         visibility: visible !important;
+        position: absolute !important;
+        right: 12px !important;
+        top: 12px !important;
+        padding: 6px !important;
     }
     [data-testid="stCodeBlock"] button:hover {
         background-color: #7a1210 !important;
@@ -326,8 +305,9 @@ with tab_text:
     if "humanized_result" in st.session_state:
         st.success("Text Successfully Humanized!")
         st.markdown("**Processed Output:**")
-        # Utilizing st.code for the native copy button, but styled via CSS to look like a normal text box
-        st.code(st.session_state.humanized_result, language="text")
+        # Critical change: language=None strips out the internal dark-mode syntax highlighters 
+        # allowing our CSS to style this box exactly like the input text area.
+        st.code(st.session_state.humanized_result, language=None)
 
 # --- FILE UPLOAD TAB ---
 with tab_files:
