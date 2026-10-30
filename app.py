@@ -21,12 +21,12 @@ st.markdown("""
     .stApp bottom {display: none !important;}
 
     /* 2. Base Background matching Next.js Light Beige */
-    .stApp {
+    .stApp, .stApp > header {
         background-color: #E8D2B5 !important;
     }
     
     /* 3. General Text & Typography */
-    html, body, [class*="css"], p, span, label {
+    html, body, [class*="css"], p, label {
         font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
         color: #1e293b !important; /* slate-800 equivalent */
     }
@@ -67,21 +67,25 @@ st.markdown("""
         background-color: #590907 !important;
     }
 
-    /* 6. Primary Action Buttons */
+    /* 6. Primary Action Buttons (FIXED TEXT COLOR SPECIFICITY) */
     .stButton > button {
         background-color: #590907 !important;
-        color: #F5EBDD !important;
         border: none !important;
         border-radius: 12px !important;
-        font-weight: 700 !important;
         padding: 0.5rem 1rem !important;
         transition: all 0.3s ease !important;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
     }
+    /* Force text inside the button to be light beige */
+    .stButton > button p, 
+    .stButton > button span, 
+    .stButton > button div {
+        color: #F5EBDD !important; 
+        font-weight: 700 !important;
+    }
     .stButton > button:hover {
         background-color: #7a1210 !important;
         transform: translateY(-2px) !important;
-        color: #F5EBDD !important;
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
     }
     .stButton > button:active {
@@ -111,14 +115,13 @@ st.markdown("""
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
         border-radius: 12px !important;
-        color: #1e293b !important;
     }
-    .stAlert p {
+    .stAlert p, .stAlert span, .stAlert div {
         color: #1e293b !important;
         font-weight: 600 !important;
     }
 
-    /* 9. File Uploader Dropzone */
+    /* 9. File Uploader Dropzone (FIXED TEXT AND BACKGROUND COLOR) */
     [data-testid="stFileUploadDropzone"] {
         background-color: #F5EBDD !important;
         border: 2px dashed #C6B49E !important;
@@ -126,22 +129,30 @@ st.markdown("""
         padding: 2rem !important;
         transition: all 0.3s ease !important;
     }
+    /* Force text inside dropzone to be dark */
+    [data-testid="stFileUploadDropzone"] p, 
+    [data-testid="stFileUploadDropzone"] span, 
+    [data-testid="stFileUploadDropzone"] div, 
+    [data-testid="stFileUploadDropzone"] small {
+        color: #1e293b !important;
+    }
     [data-testid="stFileUploadDropzone"]:hover {
         border-color: #590907 !important;
         background-color: rgba(89, 9, 7, 0.05) !important;
     }
+    /* Upload Browse Button */
     [data-testid="stFileUploadDropzone"] button {
-        background-color: #A5A79B !important;
-        color: #1e293b !important;
+        background-color: #590907 !important;
         border-radius: 8px !important;
-        border: 1px solid #C6B49E !important;
+        border: none !important;
     }
-    [data-testid="stFileUploadDropzone"] button:hover {
-        background-color: #C6B49E !important;
-        color: #1e293b !important;
+    [data-testid="stFileUploadDropzone"] button span,
+    [data-testid="stFileUploadDropzone"] button p {
+        color: #F5EBDD !important;
+        font-weight: bold !important;
     }
 
-    /* 10. Code Block to Text Area hack (To allow native copy button on output) */
+    /* 10. Code Block to Text Area hack (FIXED OUTPUT TEXT VISIBILITY) */
     [data-testid="stCodeBlock"] {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
@@ -149,21 +160,21 @@ st.markdown("""
         padding: 0 !important;
         box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
     }
-    [data-testid="stCodeBlock"] pre {
+    /* Force inner code elements to match light theme */
+    [data-testid="stCodeBlock"] pre, 
+    [data-testid="stCodeBlock"] code, 
+    [data-testid="stCodeBlock"] span {
         background-color: transparent !important;
-        white-space: pre-wrap !important; /* Force text to wrap */
+        white-space: pre-wrap !important;
         word-wrap: break-word !important;
-        font-family: 'Inter', system-ui, sans-serif !important; /* Override monospace */
-        color: #1e293b !important;
+        font-family: 'Inter', system-ui, sans-serif !important; 
+        color: #1e293b !important; /* Force text to be dark readable slate */
+        text-shadow: none !important;
+    }
+    [data-testid="stCodeBlock"] pre {
         font-size: 1rem !important;
         padding: 1rem !important;
         margin: 0 !important;
-    }
-    [data-testid="stCodeBlock"] code {
-        white-space: pre-wrap !important;
-        word-break: break-word !important;
-        color: #1e293b !important;
-        font-family: inherit !important;
     }
     /* The native copy button styling */
     [data-testid="stCodeBlock"] button {
@@ -171,6 +182,7 @@ st.markdown("""
         border: 1px solid #C6B49E !important;
         border-radius: 8px !important;
         transition: all 0.2s ease !important;
+        margin: 0.5rem !important;
     }
     [data-testid="stCodeBlock"] button:hover {
         background-color: #590907 !important;
@@ -309,7 +321,6 @@ with tab_text:
 
     if "humanized_result" in st.session_state:
         st.success("✅ Text Successfully Humanized! Click the button inside the box to copy.")
-        # Uses st.code to natively spawn a copy button, but custom CSS renders it as a text box
         st.code(st.session_state.humanized_result, language="plaintext")
 
 # --- FILE UPLOAD TAB ---
