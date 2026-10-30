@@ -41,6 +41,13 @@ except Exception as e:
     st.error("🔒 Invalid or Expired Session. Please refresh the main dashboard.")
     st.stop()
 
+# --- THE CACHE BUSTER ---
+# If Next.js sends a new timestamp, or the user clicks Sync, drop the old RAM cache
+sync_param = st.query_params.get("sync", "0")
+if st.session_state.get("last_sync") != sync_param:
+    st.session_state.last_sync = sync_param
+    st.session_state.pop("user_data", None) # Force a fresh read!
+
 # 4. RAM Caching: Read from Firestore ONLY ONCE per session
 if "user_data" not in st.session_state:
     user_ref = db.collection("users").document(user_uid)
@@ -64,6 +71,12 @@ runs_left = max_runs - daily_used + reward_credits
 # Display Credits in Streamlit Sidebar
 st.sidebar.success(f"🔋 **Runs Left:** {runs_left}")
 st.sidebar.info(f"💎 **Plan:** {plan.upper()}")
+
+# --- MANUAL SYNC BUTTON ---
+# Just in case they buy a plan in another tab and don't refresh the page
+if st.sidebar.button("🔄 Sync Account"):
+    st.session_state.pop("user_data", None)
+    st.rerun()
 
 # 5. Load Engine (Cached so it only loads once)
 @st.cache_resource
