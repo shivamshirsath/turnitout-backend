@@ -2,7 +2,6 @@ import io
 import os
 import zipfile
 import streamlit as st
-import streamlit.components.v1 as components
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth, firestore
 from engine.humanizer import TurnitoutEngine
@@ -288,35 +287,6 @@ with tab_text:
 
     if "humanized_result" in st.session_state:
         st.success("✅ Text Successfully Humanized!")
-        
-        # 100% Reliable Custom HTML Copy Button
-        safe_text = st.session_state.humanized_result.replace("`", "\\`").replace("$", "\\$")
-        copy_html = f"""
-        <script>
-        function copyText() {{
-            navigator.clipboard.writeText(`{safe_text}`);
-            const btn = document.getElementById('copyBtn');
-            btn.innerHTML = '✅ Copied to Clipboard!';
-            setTimeout(() => btn.innerHTML = '📋 Copy Text', 2000);
-        }}
-        </script>
-        <button id="copyBtn" onclick="copyText()" style="
-            background-color: #590907; 
-            color: #F5EBDD; 
-            border: none; 
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            font-family: 'Inter', system-ui, sans-serif;
-            cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
-            width: 100%;
-        ">📋 Copy Text</button>
-        """
-        components.html(copy_html, height=45)
-        
-        # Display output in a standard, easily readable/selectable box
         st.text_area("Result", value=st.session_state.humanized_result, height=250, label_visibility="collapsed")
 
 # --- FILE UPLOAD TAB ---
