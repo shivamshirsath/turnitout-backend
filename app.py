@@ -138,9 +138,14 @@ if st.button("Humanize Text", use_container_width=True):
                 "dailyWordsUsed": firestore.Increment(word_count)
             })
             st.session_state.user_data["rewardCredits"] -= 1
-             
-        st.success("Text Successfully Humanized!")
-        st.write(output_text)
+            
+        # 🚨 THE FIX: Save the output to RAM before rebooting the UI
+        st.session_state.humanized_result = output_text
         
         # Force UI counter to update instantly
         st.rerun()
+
+# 🚨 THE FIX: Display the result safely outside the button click!
+if "humanized_result" in st.session_state:
+    st.success("Text Successfully Humanized!")
+    st.write(st.session_state.humanized_result)
