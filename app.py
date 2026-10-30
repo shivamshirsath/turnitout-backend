@@ -20,57 +20,57 @@ st.markdown("""
     footer {visibility: hidden !important;}
     .stApp bottom {display: none !important;}
 
-    /* 2. Base Background matching Next.js Walnut Brown */
+    /* 2. Base Background matching Warm Cream Beige */
     .stApp {
-        background-color: #1C140F !important;
+        background-color: #E8D2B5 !important;
     }
     
     /* 3. General Text & Typography */
     html, body, [class*="css"], p, span, h1, h2, h3, h4, h5, h6, label {
         font-family: 'Inter', sans-serif !important;
-        color: #F1F5F9 !important;
+        color: #1e293b !important; /* Dark slate text for readability */
     }
 
     /* 4. Text Area (Source Input) */
     .stTextArea textarea {
-        background-color: #2A1E15 !important;
-        border: 1px solid #5A3E2B !important;
-        color: #F1F5F9 !important;
+        background-color: #F5EBDD !important;
+        border: 1px solid #C6B49E !important;
+        color: #1e293b !important;
         border-radius: 12px !important;
         padding: 1rem !important;
     }
     .stTextArea textarea:focus {
-        border-color: #D5851F !important;
-        box-shadow: 0 0 0 1px #D5851F !important;
+        border-color: #590907 !important;
+        box-shadow: 0 0 0 1px #590907 !important;
     }
 
     /* 5. Dropdowns and Sliders */
     .stSelectbox div[data-baseweb="select"] > div {
-        background-color: #2A1E15 !important;
-        border: 1px solid #5A3E2B !important;
+        background-color: #F5EBDD !important;
+        border: 1px solid #C6B49E !important;
         border-radius: 10px !important;
-        color: #F1F5F9 !important;
+        color: #1e293b !important;
     }
     .stSlider [data-testid="stTickBar"] {
-        background-color: #5A3E2B !important;
+        background-color: #C6B49E !important;
     }
     .stSlider [data-baseweb="slider"] div {
-        background-color: #87A96B !important;
+        background-color: #590907 !important;
     }
 
-    /* 6. Primary Action Buttons (Amber Glow) */
-    .stButton > button {
-        background-color: #D5851F !important;
-        color: #FFFFFF !important;
+    /* 6. Primary Action Buttons (Deep Burgundy) */
+    .stButton > button, .stButton > button * {
+        background-color: #590907 !important;
+        color: #F5EBDD !important;
         border: none !important;
         border-radius: 12px !important;
         font-weight: 700 !important;
         padding: 0.5rem 1rem !important;
         transition: all 0.3s ease !important;
     }
-    .stButton > button:hover {
-        background-color: #b56e18 !important;
-        box-shadow: 0 4px 15px rgba(213, 133, 31, 0.4) !important;
+    .stButton > button:hover, .stButton > button:hover * {
+        background-color: #7a1210 !important;
+        box-shadow: 0 4px 15px rgba(89, 9, 7, 0.25) !important;
         transform: translateY(-1px) !important;
         color: white !important;
     }
@@ -79,46 +79,46 @@ st.markdown("""
     .stTabs [data-baseweb="tab-list"] {
         background-color: transparent !important;
         gap: 2rem !important;
-        border-bottom: 1px solid #5A3E2B !important;
+        border-bottom: 1px solid #C6B49E !important;
     }
     .stTabs [data-baseweb="tab"] {
-        color: #94A3B8 !important;
+        color: #64748b !important;
         background-color: transparent !important;
         border: none !important;
         padding-bottom: 1rem !important;
     }
-    .stTabs [aria-selected="true"] {
-        color: #87A96B !important;
-        border-bottom: 2px solid #87A96B !important;
+    .stTabs [aria-selected="true"], .stTabs [aria-selected="true"] * {
+        color: #590907 !important;
+        border-bottom: 2px solid #590907 !important;
         font-weight: 700 !important;
     }
 
     /* 8. Alert Boxes (Info, Warning, Error, Success) */
     .stAlert {
-        background-color: #2A1E15 !important;
-        border: 1px solid #5A3E2B !important;
+        background-color: #F5EBDD !important;
+        border: 1px solid #C6B49E !important;
         border-radius: 12px !important;
-        color: #F1F5F9 !important;
+        color: #1e293b !important;
     }
     .stAlert p {
-        color: #F1F5F9 !important;
+        color: #1e293b !important;
     }
 
     /* 9. File Uploader Dropzone */
     [data-testid="stFileUploadDropzone"] {
-        background-color: #2A1E15 !important;
-        border: 2px dashed #5A3E2B !important;
+        background-color: #F5EBDD !important;
+        border: 2px dashed #C6B49E !important;
         border-radius: 16px !important;
         padding: 2rem !important;
         transition: all 0.3s ease !important;
     }
     [data-testid="stFileUploadDropzone"]:hover {
-        border-color: #87A96B !important;
-        background-color: rgba(135, 169, 107, 0.05) !important;
+        border-color: #590907 !important;
+        background-color: rgba(89, 9, 7, 0.05) !important;
     }
-    [data-testid="stFileUploadDropzone"] button {
-        background-color: #5A3E2B !important;
-        color: white !important;
+    [data-testid="stFileUploadDropzone"] button, [data-testid="stFileUploadDropzone"] button * {
+        background-color: #590907 !important;
+        color: #F5EBDD !important;
         border-radius: 8px !important;
     }
     </style>
