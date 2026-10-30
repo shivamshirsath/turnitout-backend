@@ -1,7 +1,14 @@
+import io
+import os
+import zipfile
 import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth, firestore
 from engine.humanizer import TurnitoutEngine
+
+# Import your file processors (ensure these files exist in your project!)
+from processors.doc_processor import process_docx_in_place
+from processors.latex_processor import process_latex_manuscript
 
 # Hide the Streamlit menu and footer so it looks like it belongs on your website
 st.set_page_config(page_title="TurnItOut AI", layout="centered")
@@ -13,7 +20,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 1. Initialize Firebase Securely (Using your exact working secrets)
+# 1. Initialize Firebase Securely
 if not firebase_admin._apps:
     cred = credentials.Certificate({
         "type": "service_account",
@@ -42,11 +49,10 @@ except Exception as e:
     st.stop()
 
 # --- THE CACHE BUSTER ---
-# If Next.js sends a new timestamp, or the user clicks Sync, drop the old RAM cache
 sync_param = st.query_params.get("sync", "0")
 if st.session_state.get("last_sync") != sync_param:
     st.session_state.last_sync = sync_param
-    st.session_state.pop("user_data", None) # Force a fresh read!
+    st.session_state.pop("user_data", None)
 
 # 4. RAM Caching: Read from Firestore ONLY ONCE per session
 if "user_data" not in st.session_state:
@@ -80,72 +86,173 @@ with col_sync:
         st.session_state.pop("user_data", None)
         st.rerun()
 
-# 5. Load Engine (Cached so it only loads once)
+# 5. Load Engine
 @st.cache_resource
 def load_engine():
     return TurnitoutEngine()
 
 engine = load_engine()
 
-# --- THE USER INTERFACE ---
-input_text = st.text_area("Paste the text you want to humanize here:", height=200)
+# --- ORGANIZE UI INTO TABS ---
+tab_text, tab_files = st.tabs(["📝 Text Humanizer", "📁 File Upload & Processing"])
 
-col1, col2 = st.columns(2)
-with col1:
-    intensity = st.slider("Humanize Intensity", 1, 100, 95)
-with col2:
-    tone = st.selectbox("Tone", ["professional", "academic", "casual"])
+with tab_text:
+    input_text = st.text_area("Paste the text you want to humanize here:", height=200)
 
-if st.button("Humanize Text", use_container_width=True):
-    if not input_text.strip():
-        st.warning("Please enter some text.")
-        st.stop()
-        
-    word_count = len(input_text.split())
-    if plan == "free" and word_count > 350:
-        st.error(f"Word limit exceeded! Free plan allows 350 words. You entered {word_count}.")
-        st.stop()
+    col1, col2 = st.columns(2)
+    with col1:
+        intensity = st.slider("Humanize Intensity", 1, 100, 95)
+    with col2:
+        tone = st.selectbox("Tone", ["professional", "academic", "casual"])
 
-    if runs_left <= 0:
-        st.error("❌ You have used all your runs! Please upgrade to Pro on the main dashboard to continue.")
-        st.stop()
-
-    with st.spinner("AI is rewriting your text..."):
-        # Run NLP Engine
-        output_text, telemetry = engine.humanize_text(
-            text=input_text,
-            intensity=intensity,
-            register=tone,
-            use_zipf_synsets=True,
-            clean_em_dashes=True,
-            voice_profile=None,
-            adaptive_mode=True,
-            seed=None 
-        )
-        
-        # Deduct Quota in Firebase (1 Write)
-        user_ref = db.collection("users").document(user_uid)
-        
-        if daily_used < max_runs:
-            user_ref.update({
-                "dailyHumanizeUsed": firestore.Increment(1), 
-                "dailyWordsUsed": firestore.Increment(word_count)
-            })
-            st.session_state.user_data["dailyHumanizeUsed"] += 1
-        else:
-            user_ref.update({
-                "rewardCredits": firestore.Increment(-1), 
-                "dailyWordsUsed": firestore.Increment(word_count)
-            })
-            st.session_state.user_data["rewardCredits"] -= 1
+    if st.button("Humanize Text", use_container_width=True):
+        if not input_text.strip():
+            st.warning("Please enter some text.")
+            st.stop()
             
-        # 🚨 THE FIX: Save the output to RAM before rebooting the UI
-        st.session_state.humanized_result = output_text
-        
-        # Force UI counter to update instantly
-        st.rerun()
+        word_count = len(input_text.split())
+        if plan == "free" and word_count > 350:
+            st.error(f"Word limit exceeded! Free plan allows 350 words. You entered {word_count}.")
+            st.stop()
 
-# 🚨 THE FIX: Display the result safely outside the button click!
-if "humanized_result" in st.session_state:
-    st.success("Text Successfully Humanized!")
-    st.write(st.session_state.humanized_result)
+        if runs_left <= 0:
+            st.error("❌ You have used all your runs! Please upgrade to Pro on the main dashboard to continue.")
+            st.stop()
+
+        with st.spinner("AI is rewriting your text..."):
+            output_text, telemetry = engine.humanize_text(
+                text=input_text,
+                intensity=intensity,
+                register=tone,
+                use_zipf_synsets=True,
+                clean_em_dashes=True,
+                voice_profile=None,
+                adaptive_mode=True,
+                seed=None 
+            )
+            
+            # Deduct Quota in Firebase (1 Write)
+            user_ref = db.collection("users").document(user_uid)
+            
+            if daily_used < max_runs:
+                user_ref.update({
+                    "dailyHumanizeUsed": firestore.Increment(1), 
+                    "dailyWordsUsed": firestore.Increment(word_count)
+                })
+                st.session_state.user_data["dailyHumanizeUsed"] += 1
+            else:
+                user_ref.update({
+                    "rewardCredits": firestore.Increment(-1), 
+                    "dailyWordsUsed": firestore.Increment(word_count)
+                })
+                st.session_state.user_data["rewardCredits"] -= 1
+                
+            st.session_state.humanized_result = output_text
+            st.rerun()
+
+    if "humanized_result" in st.session_state:
+        st.success("Text Successfully Humanized!")
+        st.write(st.session_state.humanized_result)
+
+with tab_files:
+    uploaded_files = st.file_uploader(
+        "Upload .docx, .tex, .md, .txt, or .zip",
+        type=["docx", "tex", "md", "txt", "zip"],
+        accept_multiple_files=True
+    )
+    
+    if uploaded_files and st.button("⚡ Process Uploaded Files", type="primary", use_container_width=True):
+        cost = len(uploaded_files)
+        
+        # 1. FIREBASE QUOTA LOCK
+        if runs_left < cost:
+            st.error(f"❌ Not enough runs! Processing {cost} file(s) requires {cost} runs. You only have {runs_left} left.")
+            st.stop()
+            
+        with st.spinner(f"Processing {cost} file(s) and securely updating quota..."):
+            # Set default processor arguments to match your text area logic
+            proc_intensity = 95
+            proc_register = "professional"
+            proc_zipf = True
+            proc_dashes = True
+            proc_adaptive = True
+            proc_voice = None
+
+            # 2. PROCESS FILES
+            if len(uploaded_files) == 1 and not uploaded_files[0].name.endswith(".zip"):
+                uf = uploaded_files[0]
+                raw_b = uf.read()
+                
+                if uf.name.endswith(".docx"):
+                    out_b, tel = process_docx_in_place(raw_b, engine, proc_intensity, proc_register, proc_zipf, proc_voice)
+                    st.session_state.dl_data = out_b
+                    st.session_state.dl_mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                elif uf.name.endswith(".tex"):
+                    tex_str = raw_b.decode("utf-8", errors="ignore")
+                    out_tex, tel = process_latex_manuscript(tex_str, engine, proc_intensity, proc_register, proc_zipf, proc_voice)
+                    st.session_state.dl_data = out_tex.encode("utf-8")
+                    st.session_state.dl_mime = "text/plain"
+                else:
+                    txt_str = raw_b.decode("utf-8", errors="ignore")
+                    out_txt, tel = engine.humanize_text(txt_str, proc_intensity, proc_register, proc_zipf, proc_dashes, proc_voice, adaptive_mode=proc_adaptive)
+                    st.session_state.dl_data = out_txt.encode("utf-8")
+                    st.session_state.dl_mime = "text/plain"
+                    
+                st.session_state.dl_name = f"humanized_{uf.name}"
+                
+            else:
+                # Bulk ZIP Logic
+                master_zip = io.BytesIO()
+                with zipfile.ZipFile(master_zip, "w", zipfile.ZIP_DEFLATED) as zout:
+                    for uf in uploaded_files:
+                        raw_b = uf.read()
+                        if uf.name.endswith(".docx"):
+                            h_b, _ = process_docx_in_place(raw_b, engine, proc_intensity, proc_register, proc_zipf, proc_voice)
+                            zout.writestr(f"humanized_{uf.name}", h_b)
+                        elif uf.name.endswith(".tex"):
+                            h_tex, _ = process_latex_manuscript(raw_b.decode("utf-8", errors="ignore"), engine, proc_intensity, proc_register, proc_zipf, proc_voice)
+                            zout.writestr(f"humanized_{uf.name}", h_tex.encode("utf-8"))
+                        elif uf.name.endswith(".zip"):
+                            with zipfile.ZipFile(io.BytesIO(raw_b), "r") as zin:
+                                for member in zin.namelist():
+                                    if member.endswith("/") or "__MACOSX" in member: continue
+                                    m_bytes = zin.read(member)
+                                    base_name = os.path.basename(member)
+                                    if member.endswith(".docx"):
+                                        hb, _ = process_docx_in_place(m_bytes, engine, proc_intensity, proc_register, proc_zipf, proc_voice)
+                                        zout.writestr(f"humanized_{base_name}", hb)
+                                    elif member.endswith(".tex"):
+                                        ht, _ = process_latex_manuscript(m_bytes.decode("utf-8", errors="ignore"), engine, proc_intensity, proc_register, proc_zipf, proc_voice)
+                                        zout.writestr(f"humanized_{base_name}", ht.encode("utf-8"))
+                                    elif member.endswith((".md", ".txt")):
+                                        htxt, _ = engine.humanize_text(m_bytes.decode("utf-8", errors="ignore"), proc_intensity, proc_register, proc_zipf, proc_dashes, proc_voice, adaptive_mode=proc_adaptive)
+                                        zout.writestr(f"humanized_{base_name}", htxt.encode("utf-8"))
+                        else:
+                            h_t, _ = engine.humanize_text(raw_b.decode("utf-8", errors="ignore"), proc_intensity, proc_register, proc_zipf, proc_dashes, proc_voice, adaptive_mode=proc_adaptive)
+                            zout.writestr(f"humanized_{uf.name}", h_t.encode("utf-8"))
+                            
+                st.session_state.dl_data = master_zip.getvalue()
+                st.session_state.dl_name = "turnitout_humanized_bundle.zip"
+                st.session_state.dl_mime = "application/zip"
+
+            # 3. SECURE FIREBASE WRITES (1 write per file)
+            user_ref = db.collection("users").document(user_uid)
+            for _ in range(cost):
+                if st.session_state.user_data.get("dailyHumanizeUsed", 0) < max_runs:
+                    user_ref.update({"dailyHumanizeUsed": firestore.Increment(1)})
+                    st.session_state.user_data["dailyHumanizeUsed"] += 1
+                else:
+                    user_ref.update({"rewardCredits": firestore.Increment(-1)})
+                    st.session_state.user_data["rewardCredits"] -= 1
+
+            st.rerun()
+
+    # 4. SAFE DOWNLOAD RENDERER
+    if "dl_data" in st.session_state:
+        st.success("✅ Files successfully processed and quota deducted!")
+        st.download_button(
+            label=f"⬇️ Download {st.session_state.dl_name}",
+            data=st.session_state.dl_data,
+            file_name=st.session_state.dl_name,
+            mime=st.session_state.dl_mime
+        )
