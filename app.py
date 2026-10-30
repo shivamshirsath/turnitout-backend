@@ -2,6 +2,7 @@ import io
 import os
 import zipfile
 import streamlit as st
+import streamlit.components.v1 as components
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth, firestore
 from engine.humanizer import TurnitoutEngine
@@ -28,7 +29,7 @@ st.markdown("""
     /* 3. General Text & Typography */
     html, body, [class*="css"], p, label {
         font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-        color: #1e293b !important; /* slate-800 equivalent */
+        color: #1e293b !important; /* slate-800 */
     }
     h1, h2, h3, h4, h5, h6 {
         color: #590907 !important; /* Primary Burgundy */
@@ -36,9 +37,9 @@ st.markdown("""
         letter-spacing: -0.02em !important;
     }
 
-    /* 4. Text Area (Source Input) */
+    /* 4. Text Area (Source Input & Output) */
     .stTextArea textarea {
-        background-color: #F5EBDD !important; /* Inner box lighter tone */
+        background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
         color: #1e293b !important;
         border-radius: 12px !important;
@@ -67,7 +68,7 @@ st.markdown("""
         background-color: #590907 !important;
     }
 
-    /* 6. Primary Action Buttons (FIXED TEXT COLOR SPECIFICITY) */
+    /* 6. Primary Action Buttons */
     .stButton > button {
         background-color: #590907 !important;
         border: none !important;
@@ -76,7 +77,6 @@ st.markdown("""
         transition: all 0.3s ease !important;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
     }
-    /* Force text inside the button to be light beige */
     .stButton > button p, 
     .stButton > button span, 
     .stButton > button div {
@@ -99,7 +99,7 @@ st.markdown("""
         border-bottom: 1px solid #C6B49E !important;
     }
     .stTabs [data-baseweb="tab"] {
-        color: #64748b !important; /* slate-500 */
+        color: #64748b !important;
         background-color: transparent !important;
         border: none !important;
         padding-bottom: 1rem !important;
@@ -110,7 +110,7 @@ st.markdown("""
         font-weight: 900 !important;
     }
 
-    /* 8. Alert Boxes (Info, Warning, Error, Success) */
+    /* 8. Alert Boxes */
     .stAlert {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
@@ -121,7 +121,7 @@ st.markdown("""
         font-weight: 600 !important;
     }
 
-    /* 9. File Uploader Dropzone (FIXED TEXT AND BACKGROUND COLOR) */
+    /* 9. File Uploader Dropzone and Upload Button */
     [data-testid="stFileUploadDropzone"] {
         background-color: #F5EBDD !important;
         border: 2px dashed #C6B49E !important;
@@ -129,67 +129,34 @@ st.markdown("""
         padding: 2rem !important;
         transition: all 0.3s ease !important;
     }
-    /* Force text inside dropzone to be dark */
-    [data-testid="stFileUploadDropzone"] p, 
-    [data-testid="stFileUploadDropzone"] span, 
-    [data-testid="stFileUploadDropzone"] div, 
-    [data-testid="stFileUploadDropzone"] small {
+    [data-testid="stFileUploadDropzone"] * {
         color: #1e293b !important;
     }
     [data-testid="stFileUploadDropzone"]:hover {
         border-color: #590907 !important;
         background-color: rgba(89, 9, 7, 0.05) !important;
     }
-    /* Upload Browse Button */
-    [data-testid="stFileUploadDropzone"] button {
+    /* Aggressive override for the 'Browse files' nested button */
+    [data-testid="stFileUploadDropzone"] button,
+    [data-testid="stFileUploadDropzone"] button[data-testid="stBaseButton-secondary"] {
         background-color: #590907 !important;
         border-radius: 8px !important;
-        border: none !important;
+        border: 1px solid #590907 !important;
     }
+    [data-testid="stFileUploadDropzone"] button *,
     [data-testid="stFileUploadDropzone"] button span,
     [data-testid="stFileUploadDropzone"] button p {
         color: #F5EBDD !important;
-        font-weight: bold !important;
+        font-weight: 700 !important;
     }
-
-    /* 10. Code Block to Text Area hack (FIXED OUTPUT TEXT VISIBILITY) */
-    [data-testid="stCodeBlock"] {
+    /* Uploaded File List Row */
+    [data-testid="stUploadedFile"] {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
-        border-radius: 12px !important;
-        padding: 0 !important;
-        box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
-    }
-    /* Force inner code elements to match light theme */
-    [data-testid="stCodeBlock"] pre, 
-    [data-testid="stCodeBlock"] code, 
-    [data-testid="stCodeBlock"] span {
-        background-color: transparent !important;
-        white-space: pre-wrap !important;
-        word-wrap: break-word !important;
-        font-family: 'Inter', system-ui, sans-serif !important; 
-        color: #1e293b !important; /* Force text to be dark readable slate */
-        text-shadow: none !important;
-    }
-    [data-testid="stCodeBlock"] pre {
-        font-size: 1rem !important;
-        padding: 1rem !important;
-        margin: 0 !important;
-    }
-    /* The native copy button styling */
-    [data-testid="stCodeBlock"] button {
-        background-color: #E8D2B5 !important;
-        border: 1px solid #C6B49E !important;
         border-radius: 8px !important;
-        transition: all 0.2s ease !important;
-        margin: 0.5rem !important;
     }
-    [data-testid="stCodeBlock"] button:hover {
-        background-color: #590907 !important;
-    }
-    [data-testid="stCodeBlock"] button:hover svg {
-        stroke: #F5EBDD !important;
-        fill: #F5EBDD !important;
+    [data-testid="stUploadedFile"] * {
+        color: #1e293b !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -320,8 +287,37 @@ with tab_text:
             st.rerun()
 
     if "humanized_result" in st.session_state:
-        st.success("✅ Text Successfully Humanized! Click the button inside the box to copy.")
-        st.code(st.session_state.humanized_result, language="plaintext")
+        st.success("✅ Text Successfully Humanized!")
+        
+        # 100% Reliable Custom HTML Copy Button
+        safe_text = st.session_state.humanized_result.replace("`", "\\`").replace("$", "\\$")
+        copy_html = f"""
+        <script>
+        function copyText() {{
+            navigator.clipboard.writeText(`{safe_text}`);
+            const btn = document.getElementById('copyBtn');
+            btn.innerHTML = '✅ Copied to Clipboard!';
+            setTimeout(() => btn.innerHTML = '📋 Copy Text', 2000);
+        }}
+        </script>
+        <button id="copyBtn" onclick="copyText()" style="
+            background-color: #590907; 
+            color: #F5EBDD; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-family: 'Inter', system-ui, sans-serif;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            width: 100%;
+        ">📋 Copy Text</button>
+        """
+        components.html(copy_html, height=45)
+        
+        # Display output in a standard, easily readable/selectable box
+        st.text_area("Result", value=st.session_state.humanized_result, height=250, label_visibility="collapsed")
 
 # --- FILE UPLOAD TAB ---
 with tab_files:
