@@ -267,7 +267,7 @@ with tab_text:
             st.error("❌ You have used all your runs! Please upgrade your plan on the main dashboard to continue.")
             st.stop()
 
-        with st.spinner("AI is rewriting your text..."):
+        with st.spinner("Algorithm is working for rewriting your text... Stay tuned!"):
             output_text, telemetry = engine.humanize_text(
                 text=input_text, intensity=intensity, register=tone,
                 use_zipf_synsets=True, clean_em_dashes=True,
