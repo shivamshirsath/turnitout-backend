@@ -61,7 +61,7 @@ if "user_data" not in st.session_state:
 
 # --- NEW 6-TIER LIMITS DICTIONARY ---
 PLAN_LIMITS = {
-    "free":    {"runs": 2,   "words": 100,  "uploads": 0},
+    "free":    {"runs": 2,   "words": 100,  "uploads": 1},
     "pass_3":  {"runs": 30,  "words": 1500, "uploads": 5},
     "pass_7":  {"runs": 50,  "words": 2000, "uploads": 10},
     "pass_14": {"runs": 75,  "words": 2500, "uploads": 15},
