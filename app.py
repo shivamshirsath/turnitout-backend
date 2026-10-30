@@ -31,7 +31,7 @@ st.markdown("""
         color: #1e293b !important; /* Dark slate text for readability */
     }
 
-    /* 4. Alert Boxes (Info, Warning, Error, Success) - Fixes top banners */
+    /* 4. Alert Boxes (Info, Warning, Error, Success) */
     [data-testid="stAlert"] {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
@@ -56,7 +56,7 @@ st.markdown("""
         box-shadow: 0 0 0 1px #590907 !important;
     }
 
-    /* 6. Dropdowns (Fixes dark selectbox issue) */
+    /* 6. Dropdowns */
     div[data-baseweb="select"] > div {
         background-color: #F5EBDD !important;
         border: 2px solid #C6B49E !important;
@@ -66,8 +66,6 @@ st.markdown("""
     div[data-baseweb="select"] * {
         color: #1e293b !important;
     }
-    
-    /* Dropdown list popover menu */
     div[data-baseweb="popover"] > div {
         background-color: #F5EBDD !important;
         border: 1px solid #C6B49E !important;
@@ -76,7 +74,7 @@ st.markdown("""
         color: #1e293b !important;
     }
 
-    /* 7. Sliders (Overrides default red) */
+    /* 7. Sliders */
     [data-testid="stTickBar"] {
         background-color: #C6B49E !important;
     }
@@ -126,7 +124,10 @@ st.markdown("""
         gap: 1.5rem !important;
     }
 
-    /* 10. File Uploader Dropzone (Fixes unreadable dark box) */
+    /* 10. File Uploader Deep Targeting (Fixes unreadable dark box) */
+    [data-testid="stFileUploader"] section {
+        background-color: #F5EBDD !important;
+    }
     [data-testid="stFileUploadDropzone"] {
         background-color: #F5EBDD !important;
         border: 2px dashed #A5A79B !important;
@@ -138,7 +139,7 @@ st.markdown("""
         border-color: #590907 !important;
         background-color: #E8D2B5 !important;
     }
-    [data-testid="stFileUploadDropzone"] * {
+    [data-testid="stFileUploadDropzone"] *, [data-testid="stFileUploader"] span, [data-testid="stFileUploader"] small {
         color: #1e293b !important;
     }
     [data-testid="stFileUploadDropzone"] button {
@@ -146,10 +147,53 @@ st.markdown("""
         color: #F5EBDD !important;
         border: none !important;
         border-radius: 8px !important;
-        padding: 0.25rem 0.75rem !important;
     }
     [data-testid="stFileUploadDropzone"] button * {
         color: #F5EBDD !important;
+        fill: #F5EBDD !important;
+    }
+    div[data-testid="stUploadedFile"] {
+        background-color: #F5EBDD !important;
+        border: 1px solid #C6B49E !important;
+        border-radius: 8px !important;
+        color: #1e293b !important;
+    }
+
+    /* 11. Custom Output Box with Native Copy Button */
+    [data-testid="stCodeBlock"] {
+        background-color: #F5EBDD !important;
+        border: 1px solid #C6B49E !important;
+        border-radius: 12px !important;
+        padding: 1rem !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+    }
+    [data-testid="stCodeBlock"] pre {
+        background-color: transparent !important;
+        border: none !important;
+    }
+    [data-testid="stCodeBlock"] code {
+        font-family: 'Inter', sans-serif !important; /* Overrides monospaced font */
+        color: #1e293b !important;
+        font-size: 15px !important;
+        white-space: pre-wrap !important; /* Ensures text wraps properly */
+        line-height: 1.6 !important;
+        background-color: transparent !important;
+    }
+    /* Style the copy button to fit the theme */
+    [data-testid="stCodeBlock"] button {
+        background-color: #590907 !important;
+        border-radius: 8px !important;
+        border: none !important;
+        right: 0.5rem !important;
+        top: 0.5rem !important;
+        opacity: 1 !important; 
+        visibility: visible !important;
+    }
+    [data-testid="stCodeBlock"] button:hover {
+        background-color: #7a1210 !important;
+    }
+    [data-testid="stCodeBlock"] button svg {
+        stroke: #F5EBDD !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -281,7 +325,9 @@ with tab_text:
 
     if "humanized_result" in st.session_state:
         st.success("Text Successfully Humanized!")
-        st.write(st.session_state.humanized_result)
+        st.markdown("**Processed Output:**")
+        # Utilizing st.code for the native copy button, but styled via CSS to look like a normal text box
+        st.code(st.session_state.humanized_result, language="text")
 
 # --- FILE UPLOAD TAB ---
 with tab_files:
