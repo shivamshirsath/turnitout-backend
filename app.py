@@ -8,12 +8,119 @@ from engine.humanizer import TurnitoutEngine
 from processors.doc_processor import process_docx_in_place
 from processors.latex_processor import process_latex_manuscript
 
-st.set_page_config(page_title="TurnItOut AI", layout="centered")
+# Set page title to humantext
+st.set_page_config(page_title="humantext workspace", layout="centered")
+
+# --- MASSIVE UI THEME OVERRIDE ---
 st.markdown("""
     <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    /* 1. Hide default Streamlit headers, footers, and menus completely */
+    #MainMenu {visibility: hidden !important;}
+    header {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    .stApp bottom {display: none !important;}
+
+    /* 2. Base Background matching Next.js Walnut Brown */
+    .stApp {
+        background-color: #1C140F !important;
+    }
+    
+    /* 3. General Text & Typography */
+    html, body, [class*="css"], p, span, h1, h2, h3, h4, h5, h6, label {
+        font-family: 'Inter', sans-serif !important;
+        color: #F1F5F9 !important;
+    }
+
+    /* 4. Text Area (Source Input) */
+    .stTextArea textarea {
+        background-color: #2A1E15 !important;
+        border: 1px solid #5A3E2B !important;
+        color: #F1F5F9 !important;
+        border-radius: 12px !important;
+        padding: 1rem !important;
+    }
+    .stTextArea textarea:focus {
+        border-color: #D5851F !important;
+        box-shadow: 0 0 0 1px #D5851F !important;
+    }
+
+    /* 5. Dropdowns and Sliders */
+    .stSelectbox div[data-baseweb="select"] > div {
+        background-color: #2A1E15 !important;
+        border: 1px solid #5A3E2B !important;
+        border-radius: 10px !important;
+        color: #F1F5F9 !important;
+    }
+    .stSlider [data-testid="stTickBar"] {
+        background-color: #5A3E2B !important;
+    }
+    .stSlider [data-baseweb="slider"] div {
+        background-color: #87A96B !important;
+    }
+
+    /* 6. Primary Action Buttons (Amber Glow) */
+    .stButton > button {
+        background-color: #D5851F !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        padding: 0.5rem 1rem !important;
+        transition: all 0.3s ease !important;
+    }
+    .stButton > button:hover {
+        background-color: #b56e18 !important;
+        box-shadow: 0 4px 15px rgba(213, 133, 31, 0.4) !important;
+        transform: translateY(-1px) !important;
+        color: white !important;
+    }
+
+    /* 7. Tabs Styling (Text vs File Upload) */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: transparent !important;
+        gap: 2rem !important;
+        border-bottom: 1px solid #5A3E2B !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        color: #94A3B8 !important;
+        background-color: transparent !important;
+        border: none !important;
+        padding-bottom: 1rem !important;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #87A96B !important;
+        border-bottom: 2px solid #87A96B !important;
+        font-weight: 700 !important;
+    }
+
+    /* 8. Alert Boxes (Info, Warning, Error, Success) */
+    .stAlert {
+        background-color: #2A1E15 !important;
+        border: 1px solid #5A3E2B !important;
+        border-radius: 12px !important;
+        color: #F1F5F9 !important;
+    }
+    .stAlert p {
+        color: #F1F5F9 !important;
+    }
+
+    /* 9. File Uploader Dropzone */
+    [data-testid="stFileUploadDropzone"] {
+        background-color: #2A1E15 !important;
+        border: 2px dashed #5A3E2B !important;
+        border-radius: 16px !important;
+        padding: 2rem !important;
+        transition: all 0.3s ease !important;
+    }
+    [data-testid="stFileUploadDropzone"]:hover {
+        border-color: #87A96B !important;
+        background-color: rgba(135, 169, 107, 0.05) !important;
+    }
+    [data-testid="stFileUploadDropzone"] button {
+        background-color: #5A3E2B !important;
+        color: white !important;
+        border-radius: 8px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -33,7 +140,7 @@ db = firestore.client()
 # 2. Extract and Verify Token
 id_token = st.query_params.get("token")
 if not id_token:
-    st.error("🔒 Access Denied. Please use this tool through the official TurnItOut dashboard.")
+    st.error("🔒 Access Denied. Please use this tool through the official humantext dashboard.")
     st.stop()
 
 try:
@@ -226,7 +333,7 @@ with tab_files:
                                 zout.writestr(f"humanized_{uf.name}", h_t.encode("utf-8"))
                                 
                     st.session_state.dl_data = master_zip.getvalue()
-                    st.session_state.dl_name = "turnitout_humanized_bundle.zip"
+                    st.session_state.dl_name = "humantext_bundle.zip"
                     st.session_state.dl_mime = "application/zip"
 
                 # Deduct Quotas
